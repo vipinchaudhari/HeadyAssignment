@@ -1,10 +1,7 @@
 package com.heady.ecommerce.repository;
 
-
-import com.heady.ecommerce.di.DaggerHeadyComponent;
+import com.heady.ecommerce.application.ECommerceApp;
 import com.heady.ecommerce.model.Categories;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,7 +13,7 @@ public class HeadyService {
     HeadyApi api;
 
     public HeadyService() {
-        DaggerHeadyComponent.create().inject(this);
+        ECommerceApp.getHeadyComponent().inject(this);
     }
 
     public Single<Categories> getProductsData(){

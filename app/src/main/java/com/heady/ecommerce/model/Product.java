@@ -1,27 +1,53 @@
 package com.heady.ecommerce.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Product {
 
+    @PrimaryKey
+    @ForeignKey(entity = Product.class, parentColumns = "id", childColumns = "id", onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
     @SerializedName("id")
     @Expose
-    private Integer id;
+    public Integer id;
+
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     @Expose
-    private String name;
+    public String name;
+
+    @ColumnInfo(name = "date_added")
     @SerializedName("date_added")
     @Expose
-    private String dateAdded;
+    public String dateAdded;
+
+    @Ignore
     @SerializedName("variants")
     @Expose
-    private List<Variant> variants = null;
+    public List<Variant> variants = null;
+
+    @Ignore
     @SerializedName("tax")
     @Expose
-    private Tax tax;
+    public Tax tax;
+
+    @ColumnInfo(name = "tax_name")
+    public String taxName;
+
+    @ColumnInfo(name = "tax_value")
+    public Double taxValue;
+
+    @ColumnInfo(name = "category_id")
+    int categoryId;
 
     public Integer getId() {
         return id;
@@ -63,6 +89,30 @@ public class Product {
         this.tax = tax;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getTaxName() {
+        return taxName;
+    }
+
+    public void setTaxName(String taxName) {
+        this.taxName = taxName;
+    }
+
+    public Double getTaxValue() {
+        return taxValue;
+    }
+
+    public void setTaxValue(Double taxValue) {
+        this.taxValue = taxValue;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -71,6 +121,9 @@ public class Product {
                 ", dateAdded='" + dateAdded + '\'' +
                 ", variants=" + variants +
                 ", tax=" + tax +
+                ", taxName=" + taxName +
+                ", taxValue=" + taxValue +
+                ", categoryId=" + categoryId +
                 '}';
     }
 }

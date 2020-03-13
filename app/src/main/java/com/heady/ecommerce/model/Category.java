@@ -1,24 +1,47 @@
 package com.heady.ecommerce.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Category {
 
+    @PrimaryKey()
     @SerializedName("id")
     @Expose
-    private Integer id;
+    public Integer id;
+
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     @Expose
-    private String name;
+    public String name;
+
+    @Ignore
     @SerializedName("products")
     @Expose
-    private List<Product> products = null;
+    public List<Product> products = null;
+
+    @Ignore
     @SerializedName("child_categories")
     @Expose
-    private List<Object> childCategories = null;
+    public List<Integer> childCategories = null;
+
+    @Ignore
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category() {
+
+    }
 
     public Integer getId() {
         return id;
@@ -44,11 +67,11 @@ public class Category {
         this.products = products;
     }
 
-    public List<Object> getChildCategories() {
+    public List<Integer> getChildCategories() {
         return childCategories;
     }
 
-    public void setChildCategories(List<Object> childCategories) {
+    public void setChildCategories(List<Integer> childCategories) {
         this.childCategories = childCategories;
     }
 

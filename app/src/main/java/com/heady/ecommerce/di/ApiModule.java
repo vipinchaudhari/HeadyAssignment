@@ -5,6 +5,8 @@ import com.heady.ecommerce.repository.HeadyService;
 import com.heady.ecommerce.repository.NetworkCall;
 import com.heady.ecommerce.utils.Constants;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -16,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule implements Constants {
 
+    @Singleton
     @Provides
     public HeadyApi provideHeadyApi() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -36,8 +39,9 @@ public class ApiModule implements Constants {
     public HeadyService provideHeadyService() {
         return new HeadyService();
     }
+
     @Provides
-    public NetworkCall provideNetworkCall(){
+    public NetworkCall provideNetworkCall() {
         return new NetworkCall();
     }
 }

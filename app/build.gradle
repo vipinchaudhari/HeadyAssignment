@@ -22,14 +22,20 @@ android {
     dataBinding {
         enabled = true
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 def material_design = '1.1.0'
 def recycler_view_version = '1.1.0'
 def lifecycle_version = "2.1.0"
-def retrofit_version = '2.3.0'
+def retrofit_version = '2.7.2'
 def retrofit_interceptor_version = '4.4.0'
-def rx_java_version = '2.0.1'
-def dagger_version = '2.13'
+def rx_java_version = '2.2.19'
+def rx_android_version = '2.1.1'
+def dagger_version = '2.27'
+def room_version = "2.2.4"
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -51,7 +57,7 @@ dependencies {
 
     //rxJava
     implementation "io.reactivex.rxjava2:rxjava:$rx_java_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rx_java_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
@@ -59,6 +65,11 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
 
+    //room db
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

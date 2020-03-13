@@ -1,13 +1,19 @@
 package com.heady.ecommerce.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Tax {
 
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     @Expose
     private String name;
+    @ColumnInfo(name = "value")
     @SerializedName("value")
     @Expose
     private Double value;
