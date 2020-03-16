@@ -3,7 +3,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground">
 
         <TextView
             android:id="@+id/tvProductLabel"
@@ -31,43 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvProductLabel" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilColor"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/color"
-            android:padding="5dp"
-            app:layout_constraintEnd_toStartOf="@+id/tilSize"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProduct">
-
-            <AutoCompleteTextView
-                android:id="@+id/ddColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilSize"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/size"
-            android:padding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tilColor"
-            app:layout_constraintTop_toBottomOf="@id/tvProduct">
-
-            <AutoCompleteTextView
-                android:id="@+id/ddSize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <TextView
             android:id="@+id/tvPriceLabel"
             android:layout_width="0dp"
@@ -86,6 +50,7 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingBottom="5dp"
+            android:text="@{viewModel.getPrice()}"
             android:textAllCaps="true"
             android:textColor="@color/colorOnBackground"
             android:textSize="18sp"
@@ -111,7 +76,7 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingBottom="5dp"
-            android:text="@string/tax"
+            android:text="@{String.valueOf(viewModel.getProductVariants().data.product.taxValue)}"
             android:textAllCaps="true"
             android:textColor="@color/colorOnBackground"
             android:textSize="18sp"
@@ -137,13 +102,50 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingBottom="5dp"
-            android:text="@string/total"
+            android:text="@{viewModel.getTotal()}"
             android:textAllCaps="true"
             android:textColor="@color/colorOnBackground"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalLabel" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilColor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/color"
+            android:padding="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/tilSize"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProduct">
+
+            <AutoCompleteTextView
+                android:id="@+id/ddColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSize"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/size"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tilColor"
+            app:layout_constraintTop_toBottomOf="@id/tvProduct">
+
+            <AutoCompleteTextView
+                android:id="@+id/ddSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>

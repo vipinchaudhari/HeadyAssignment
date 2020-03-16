@@ -71,12 +71,11 @@ public abstract class RootDao {
                 product.setTaxValue(product.getTax().getValue());
                 //prepare records for variant table
                 if (product.getVariants() != null) {
-                    allVariants.addAll(product.getVariants());
-                    if (allVariants != null) {
-                        for (int j = 0; j < allVariants.size(); j++) {
-                            allVariants.get(j).setProductId(product.getId());
-                        }
+                    List<Variant> variants = product.getVariants();
+                    for (int j = 0; j < variants.size(); j++) {
+                        variants.get(j).setProductId(product.getId());
                     }
+                    allVariants.addAll(variants);
                 }
             }
             //insert records into product

@@ -2,6 +2,7 @@ package com.heady.ecommerce.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heady.ecommerce.R;
+import com.heady.ecommerce.application.ECommerceApp;
 import com.heady.ecommerce.databinding.FragmentProductBinding;
 import com.heady.ecommerce.model.ProductVariants;
 import com.heady.ecommerce.repository.Resource;
@@ -21,7 +23,7 @@ import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.viewmodel.ProductViewModel;
 
 
-public class ProductFragment extends Fragment implements Constants {
+public class ProductFragment extends BaseFragment {
     private static String TAG = ProductFragment.class.getSimpleName();
     FragmentProductBinding binding;
     ProductViewModel productViewModel;
@@ -65,8 +67,7 @@ public class ProductFragment extends Fragment implements Constants {
                 switch (productVariantsResource.status) {
                     case SUCCESS:
                         if (productVariantsResource.data != null) {
-                            productViewModel.setSizes(productVariantsResource.data.variants);
-                            productViewModel.setColors(productVariantsResource.data.variants);
+                            updateView(productVariantsResource.data);
                         }
                         break;
                     case LOADING:
@@ -76,5 +77,17 @@ public class ProductFragment extends Fragment implements Constants {
                 }
             }
         });
+    }
+
+    private void updateView(ProductVariants productVariants) {
+        productViewModel.setProductVariants(productVariants);
+        if (productVariants.variants != null && productVariants.variants.size() > 0) {
+            productViewModel.setPrice(productVariants.variants.get(0).getPrice().doubleValue());
+        }
+
+        binding.ddSize.setAdapter(productViewModel.setSizes(productVariants.variants));
+        binding.ddColor.setAdapter((productViewModel.setColors(productVariants.variants)));
+
+        binding.setViewModel(productViewModel);
     }
 }

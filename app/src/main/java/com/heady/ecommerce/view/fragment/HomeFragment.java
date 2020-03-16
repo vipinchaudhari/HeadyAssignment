@@ -26,7 +26,7 @@ import com.heady.ecommerce.viewmodel.HomeViewModel;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements Constants {
+public class HomeFragment extends BaseFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     FragmentHomeBinding binding;
     HomeViewModel homeViewModel;
@@ -66,25 +66,19 @@ public class HomeFragment extends Fragment implements Constants {
                         if (listResource.data != null && listResource.data.size() > 0) {
                             CategoryPagerAdapter adapter = new CategoryPagerAdapter(getChildFragmentManager());
                             binding.vpCategories.setAdapter(adapter);
-                            switch (listResource.status) {
-                                case SUCCESS:
-                                    if (listResource.data != null && listResource.data.size() > 0) {
-                                        adapter.setCategories(listResource.data);
-                                    }
-                                    break;
-                                case ERROR:
 
-                                    break;
-                                case LOADING:
-
-                                    break;
-
+                            mainActivity.hideLoader();
+                            if (listResource.data != null && listResource.data.size() > 0) {
+                                adapter.setCategories(listResource.data);
                             }
                         }
+
                         break;
                     case LOADING:
+                        mainActivity.displayLoader();
                         break;
                     case ERROR:
+                        mainActivity.hideLoader();
                         break;
                 }
             }

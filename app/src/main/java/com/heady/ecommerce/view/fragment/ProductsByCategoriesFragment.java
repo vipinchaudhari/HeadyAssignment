@@ -25,7 +25,7 @@ import com.heady.ecommerce.viewmodel.ProductByCategoriesViewModel;
 
 import java.util.List;
 
-public class ProductsByCategoriesFragment extends Fragment implements Constants {
+public class ProductsByCategoriesFragment extends BaseFragment {
     private static final String TAG = ProductsByCategoriesFragment.class.getSimpleName();
     FragmentProductsByCategoriesBinding binding;
     ProductByCategoriesViewModel productByCategoriesViewModel;

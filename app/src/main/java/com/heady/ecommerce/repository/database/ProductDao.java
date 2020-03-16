@@ -27,7 +27,7 @@ public interface ProductDao {
 
     @Transaction
     @Query("select * from Variant where product_id=:productId")
-    List<Variant> getAllVariants(int productId);
+    List<Variant> getVariants(int productId);
 
     @Transaction
     @Query("Select * from Product where id=:productId")

@@ -34,7 +34,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return categories.get(position).getName();
     }
-
+    @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
+    }
     public void setCategories(List<Category> categories){
         this.categories = categories;
         notifyDataSetChanged();

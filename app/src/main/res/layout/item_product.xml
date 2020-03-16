@@ -8,7 +8,8 @@
         android:onClick="@{()->viewModel.onProductSelected(viewModel.getProducts().get(position),position)}"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:background="@color/colorBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

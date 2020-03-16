@@ -26,7 +26,7 @@ import com.heady.ecommerce.viewmodel.ChildCategoriesViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChildCategoriesFragment extends Fragment implements Constants {
+public class ChildCategoriesFragment extends BaseFragment {
     private static final String TAG = ChildCategoriesFragment.class.getSimpleName();
     FragmentChildCategoriesBinding binding;
     private ChildCategoriesViewModel childCategoriesViewModel;
