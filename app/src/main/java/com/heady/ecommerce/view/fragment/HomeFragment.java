@@ -21,6 +21,7 @@ import com.heady.ecommerce.model.Category;
 import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.utils.Constants;
+import com.heady.ecommerce.view.adapter.CategoryPagerAdapter;
 import com.heady.ecommerce.viewmodel.HomeViewModel;
 
 import java.util.List;
@@ -63,7 +64,22 @@ public class HomeFragment extends Fragment implements Constants {
                 switch (listResource.status) {
                     case SUCCESS:
                         if (listResource.data != null && listResource.data.size() > 0) {
-                            homeViewModel.getCategoryAdapter().setCategories(listResource.data);
+                            CategoryPagerAdapter adapter = new CategoryPagerAdapter(getChildFragmentManager());
+                            binding.vpCategories.setAdapter(adapter);
+                            switch (listResource.status) {
+                                case SUCCESS:
+                                    if (listResource.data != null && listResource.data.size() > 0) {
+                                        adapter.setCategories(listResource.data);
+                                    }
+                                    break;
+                                case ERROR:
+
+                                    break;
+                                case LOADING:
+
+                                    break;
+
+                            }
                         }
                         break;
                     case LOADING:
@@ -73,28 +89,6 @@ public class HomeFragment extends Fragment implements Constants {
                 }
             }
         });
-
-        homeViewModel.registerToActions().observe(this, new Observer<Event>() {
-            @Override
-            public void onChanged(Event event) {
-                Log.d(TAG, "registerToActions()" + event);
-                switch (event.getEvent()) {
-                    case CATEGORY_SELECTED:
-                        Toast.makeText(getContext(), "category clicked", Toast.LENGTH_LONG).show();
-                        ChildCategoriesFragment childCategoriesFragment = new ChildCategoriesFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(CATEGORY_ID, ((Category) event.getData()).id);
-                        bundle.putString(CATEGORY_NAME, ((Category) event.getData()).name);
-                        childCategoriesFragment.setArguments(bundle);
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.container, childCategoriesFragment)
-                                .addToBackStack(ChildCategoriesFragment.class.getName())
-                                .commit();
-                        break;
-                }
-            }
-        });
-
     }
 
     @Override

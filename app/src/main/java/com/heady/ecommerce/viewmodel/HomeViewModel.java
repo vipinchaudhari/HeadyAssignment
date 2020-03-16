@@ -3,18 +3,18 @@ package com.heady.ecommerce.viewmodel;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
+
 import com.heady.ecommerce.application.ECommerceApp;
-import com.heady.ecommerce.model.Categories;
 import com.heady.ecommerce.interfaces.DataSourceCallback;
+import com.heady.ecommerce.model.Categories;
 import com.heady.ecommerce.model.Category;
 import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.repository.HeadyService;
 import com.heady.ecommerce.repository.NetworkCall;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.repository.database.AppDatabase;
-import com.heady.ecommerce.repository.database.DatabaseCall;
+import com.heady.ecommerce.repository.DatabaseCall;
 import com.heady.ecommerce.utils.RXJavaHelper;
-import com.heady.ecommerce.view.adapter.CategoryAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +42,11 @@ public class HomeViewModel extends BaseViewModel implements DataSourceCallback {
     @Inject
     DatabaseCall<List<Category>> databaseCall;
 
-    CategoryAdapter categoryAdapter;
+
 
     {
         ECommerceApp.getHeadyComponent().inject(this);
-        categoryAdapter = new CategoryAdapter(this);
+
     }
 
     public MutableLiveData<Resource<List<Category>>> getCategories() {
@@ -59,18 +59,6 @@ public class HomeViewModel extends BaseViewModel implements DataSourceCallback {
 
     public void onCategorySelected(Category category, Integer position) {
         eventLiveData.sendAction(new Event<>(CATEGORY_SELECTED, category, position));
-    }
-
-    public CategoryAdapter  getCategoryAdapter() {
-        return categoryAdapter;
-    }
-
-    public List<Category> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<Category> categoryList) {
-        this.categoryList = categoryList;
     }
 
     @Override

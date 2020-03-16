@@ -1,19 +1,17 @@
 package com.heady.ecommerce.view.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.heady.ecommerce.BR;
 import com.heady.ecommerce.R;
 import com.heady.ecommerce.databinding.ItemCategoryBinding;
 import com.heady.ecommerce.model.Category;
+import com.heady.ecommerce.viewmodel.CategoriesViewModel;
 import com.heady.ecommerce.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
@@ -21,11 +19,11 @@ import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private static final String TAG = CategoryAdapter.class.getSimpleName();
-    private final HomeViewModel homeViewModel;
+    private final CategoriesViewModel homeViewModel;
     List<Category> categories;
 
-    public CategoryAdapter(HomeViewModel homeViewModel) {
-        this.homeViewModel = homeViewModel;
+    public CategoryAdapter(CategoriesViewModel categoriesViewModel) {
+        this.homeViewModel = categoriesViewModel;
         categories = new ArrayList<>();
     }
 
@@ -62,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             this.binding = binding;
         }
 
-        void bind(HomeViewModel viewModel, Integer position) {
+        void bind(CategoriesViewModel viewModel, Integer position) {
             binding.setVariable(BR.viewModel, viewModel);
             binding.setVariable(BR.position, position);
             binding.executePendingBindings();

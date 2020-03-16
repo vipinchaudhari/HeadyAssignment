@@ -4,10 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.heady.ecommerce.application.ECommerceApp;
 import com.heady.ecommerce.model.Category;
+import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.model.Product;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.repository.database.AppDatabase;
-import com.heady.ecommerce.repository.database.DatabaseCall;
+import com.heady.ecommerce.repository.DatabaseCall;
 import com.heady.ecommerce.view.adapter.ProductAdapter;
 
 import java.util.ArrayList;
@@ -47,5 +48,9 @@ public class ProductByCategoriesViewModel extends BaseViewModel {
 
     public List<Product> getProducts() {
         return productList;
+    }
+
+    public void onProductSelected(Product product, Integer position) {
+        eventLiveData.sendAction(new Event<>(PRODUCT_SELECTED, product, position));
     }
 }

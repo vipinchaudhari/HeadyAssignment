@@ -20,4 +20,5 @@ public interface Constants {
     //key constants
     String CATEGORY_ID = "CATEGORY_ID";
     String CATEGORY_NAME = "CATEGORY_NAME";
+    String PRODUCT_ID = "PRODUCT_ID";
 }

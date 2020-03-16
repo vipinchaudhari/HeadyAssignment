@@ -11,12 +11,13 @@ import com.heady.ecommerce.view.fragment.ProductsByCategoriesFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductsPagerAdapter extends FragmentPagerAdapter {
-    private static final String TAG = ProductsPagerAdapter.class.getSimpleName();
+public class PagerAdapter extends FragmentPagerAdapter {
+    private static final String TAG = PagerAdapter.class.getSimpleName();
     List<Category> categories = new ArrayList<>();
 
-    public ProductsPagerAdapter(@NonNull FragmentManager fm) {
+    public PagerAdapter(@NonNull FragmentManager fm) {
         super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
     }
 
     @Override

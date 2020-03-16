@@ -1,15 +1,12 @@
 package com.heady.ecommerce.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.heady.ecommerce.application.ECommerceApp;
 import com.heady.ecommerce.model.Category;
-import com.heady.ecommerce.model.ChildCategory;
-import com.heady.ecommerce.model.Product;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.repository.database.AppDatabase;
-import com.heady.ecommerce.repository.database.DatabaseCall;
+import com.heady.ecommerce.repository.DatabaseCall;
 
 import java.util.List;
 

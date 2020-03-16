@@ -19,7 +19,8 @@ import com.heady.ecommerce.databinding.FragmentChildCategoriesBinding;
 import com.heady.ecommerce.model.Category;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.utils.Constants;
-import com.heady.ecommerce.view.adapter.ProductsPagerAdapter;
+import com.heady.ecommerce.view.adapter.CategoryPagerAdapter;
+import com.heady.ecommerce.view.adapter.PagerAdapter;
 import com.heady.ecommerce.viewmodel.ChildCategoriesViewModel;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class ChildCategoriesFragment extends Fragment implements Constants {
                     @Override
                     public void onChanged(Resource<List<Category>> listResource) {
                         Log.d(TAG, "onChanged() " + listResource.data);
-                        ProductsPagerAdapter adapter = new ProductsPagerAdapter(getChildFragmentManager());
+                        PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
                         binding.vpProducts.setAdapter(adapter);
                         switch (listResource.status) {
                             case SUCCESS:

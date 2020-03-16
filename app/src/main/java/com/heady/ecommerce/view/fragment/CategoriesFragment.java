@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,27 +16,27 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heady.ecommerce.R;
-import com.heady.ecommerce.databinding.FragmentProductsByCategoriesBinding;
+import com.heady.ecommerce.databinding.FragmentCategoriesBinding;
+import com.heady.ecommerce.model.Category;
 import com.heady.ecommerce.model.Event;
-import com.heady.ecommerce.model.Product;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.view.activity.MainActivity;
-import com.heady.ecommerce.viewmodel.ProductByCategoriesViewModel;
+import com.heady.ecommerce.viewmodel.CategoriesViewModel;
 
 import java.util.List;
 
-public class ProductsByCategoriesFragment extends Fragment implements Constants {
-    private static final String TAG = ProductsByCategoriesFragment.class.getSimpleName();
-    FragmentProductsByCategoriesBinding binding;
-    ProductByCategoriesViewModel productByCategoriesViewModel;
+public class CategoriesFragment extends Fragment implements Constants {
+    private static final String TAG = CategoriesFragment.class.getSimpleName();
+    FragmentCategoriesBinding binding;
+    CategoriesViewModel categoriesViewModel;
 
     public static Fragment newInstance(int categoryId) {
         Bundle bundle = new Bundle();
         bundle.putInt(CATEGORY_ID, categoryId);
-        ProductsByCategoriesFragment productsByCategoriesFragment = new ProductsByCategoriesFragment();
-        productsByCategoriesFragment.setArguments(bundle);
-        return productsByCategoriesFragment;
+        CategoriesFragment categoriesFragment = new CategoriesFragment();
+        categoriesFragment.setArguments(bundle);
+        return categoriesFragment;
     }
 
     @Override
@@ -46,14 +47,14 @@ public class ProductsByCategoriesFragment extends Fragment implements Constants 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        productByCategoriesViewModel = ViewModelProviders.of(this).get(ProductByCategoriesViewModel.class);
+        categoriesViewModel = ViewModelProviders.of(this).get(CategoriesViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_products_by_categories, container, false);
-        binding.setViewModel(productByCategoriesViewModel);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_categories, container, false);
+        binding.setViewModel(categoriesViewModel);
         return binding.getRoot();
     }
 
@@ -61,15 +62,15 @@ public class ProductsByCategoriesFragment extends Fragment implements Constants 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, CATEGORY_ID + getArguments().getInt(CATEGORY_ID));
-        productByCategoriesViewModel.getProductsByCategory(getArguments().getInt(CATEGORY_ID))
-                .observe(this, new Observer<Resource<List<Product>>>() {
+        categoriesViewModel.getCategories(getArguments().getInt(CATEGORY_ID))
+                .observe(this, new Observer<Resource<List<Category>>>() {
                     @Override
-                    public void onChanged(Resource<List<Product>> listResource) {
+                    public void onChanged(Resource<List<Category>> listResource) {
                         Log.d(TAG, "onChange() " + listResource.data);
                         switch (listResource.status) {
                             case SUCCESS:
                                 if (listResource.data != null && listResource.data.size() > 0) {
-                                    productByCategoriesViewModel.setProducts(listResource.data);
+                                    categoriesViewModel.setCategoryList(listResource.data);
                                 }
                                 break;
                             case LOADING:
@@ -80,19 +81,21 @@ public class ProductsByCategoriesFragment extends Fragment implements Constants 
                     }
                 });
 
-        productByCategoriesViewModel.registerToActions().observe(this, new Observer<Event<Product>>() {
+        categoriesViewModel.registerToActions().observe(this, new Observer<Event>() {
             @Override
-            public void onChanged(Event<Product> event) {
+            public void onChanged(Event event) {
+                Log.d(TAG, "registerToActions()" + event);
                 switch (event.getEvent()) {
-                    case PRODUCT_SELECTED:
-                        gotoProduct(event.getData());
+                    case CATEGORY_SELECTED:
+                        ChildCategoriesFragment childCategoriesFragment = new ChildCategoriesFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(CATEGORY_ID, ((Category) event.getData()).id);
+                        bundle.putString(CATEGORY_NAME, ((Category) event.getData()).name);
+                        childCategoriesFragment.setArguments(bundle);
+                        ((MainActivity) getActivity()).inflateFragment(childCategoriesFragment);
                         break;
                 }
             }
         });
-    }
-
-    private void gotoProduct(final Product product) {
-        ((MainActivity) getActivity()).inflateFragment(ProductFragment.newInstance(product.getId()));
     }
 }

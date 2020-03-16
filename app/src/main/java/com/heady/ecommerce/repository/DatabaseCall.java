@@ -1,11 +1,10 @@
-package com.heady.ecommerce.repository.database;
+package com.heady.ecommerce.repository;
 
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.heady.ecommerce.interfaces.DataSourceCallback;
-import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.utils.RXJavaHelper;
 

@@ -11,7 +11,7 @@ import com.heady.ecommerce.utils.Constants;
 public class BaseViewModel<T> extends ViewModel implements Constants {
     protected ActionLiveData<Event<T>> eventLiveData = new ActionLiveData<Event<T>>();
     public MutableLiveData<Event<T>> registerToActions() {
-        eventLiveData.postValue(new Event<>(NONE, null, 0));
+        eventLiveData.postValue(new Event<T>(NONE, null, 0));
         return eventLiveData;
     }
 }
