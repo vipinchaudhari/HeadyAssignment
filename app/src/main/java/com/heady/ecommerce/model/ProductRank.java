@@ -12,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 public class ProductRank {
 
     @PrimaryKey
+    @ForeignKey(entity = Product.class, parentColumns = "id", childColumns = "id", onDelete = ForeignKey.CASCADE)
     @SerializedName("id")
     @Expose
     private Integer id;

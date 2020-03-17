@@ -19,7 +19,6 @@ import com.heady.ecommerce.databinding.FragmentProductsByCategoriesBinding;
 import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.model.Product;
 import com.heady.ecommerce.repository.Resource;
-import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.view.activity.MainActivity;
 import com.heady.ecommerce.viewmodel.ProductByCategoriesViewModel;
 
@@ -60,7 +59,9 @@ public class ProductsByCategoriesFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Log.d(TAG, CATEGORY_ID + getArguments().getInt(CATEGORY_ID));
+
         productByCategoriesViewModel.getProductsByCategory(getArguments().getInt(CATEGORY_ID))
                 .observe(this, new Observer<Resource<List<Product>>>() {
                     @Override
@@ -80,15 +81,34 @@ public class ProductsByCategoriesFragment extends BaseFragment {
                     }
                 });
 
-        productByCategoriesViewModel.registerToActions().observe(this, new Observer<Event<Product>>() {
-            @Override
-            public void onChanged(Event<Product> event) {
-                switch (event.getEvent()) {
-                    case PRODUCT_SELECTED:
-                        gotoProduct(event.getData());
-                        break;
-                }
+        productByCategoriesViewModel.registerToActions().observe(this, (Observer<Event<Product>>) event -> {
+            switch (event.getEvent()) {
+                case PRODUCT_SELECTED:
+                    gotoProduct(event.getData());
+                    break;
             }
+        });
+
+        initFilters();
+    }
+
+    //filter the products
+    private void initFilters() {
+        binding.cgFilters.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.cMostPurchased:
+                    productByCategoriesViewModel.setPurchasedFilter(MOST_PURCHARED_FILTER);
+                    break;
+                case R.id.cMostShared:
+                    productByCategoriesViewModel.setSharedFilter(MOST_SHARED_FILTER);
+                    break;
+                case R.id.cMostViewed:
+                    productByCategoriesViewModel.setViewedFilter(MOST_VIEW_FILTER);
+                    break;
+                default:
+                    productByCategoriesViewModel.getProductsByCategory(getArguments().getInt(CATEGORY_ID));
+            }
+
         });
     }
 

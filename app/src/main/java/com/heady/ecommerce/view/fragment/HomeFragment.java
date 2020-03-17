@@ -6,21 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heady.ecommerce.R;
 import com.heady.ecommerce.databinding.FragmentHomeBinding;
 import com.heady.ecommerce.model.Category;
-import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.repository.Resource;
-import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.view.adapter.CategoryPagerAdapter;
 import com.heady.ecommerce.viewmodel.HomeViewModel;
 
@@ -57,30 +53,27 @@ public class HomeFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
-        homeViewModel.getCategories().observe(this, new Observer<Resource<List<Category>>>() {
-            @Override
-            public void onChanged(Resource<List<Category>> listResource) {
-                Log.d(TAG, String.valueOf(listResource.data));
-                switch (listResource.status) {
-                    case SUCCESS:
-                        if (listResource.data != null && listResource.data.size() > 0) {
-                            CategoryPagerAdapter adapter = new CategoryPagerAdapter(getChildFragmentManager());
-                            binding.vpCategories.setAdapter(adapter);
+        //get categories by observing live data
+        homeViewModel.getCategories().observe(this, listResource -> {
+            Log.d(TAG, String.valueOf(listResource.data));
+            switch (listResource.status) {
+                case SUCCESS:
+                    if (listResource.data != null && listResource.data.size() > 0) {
+                        CategoryPagerAdapter adapter = new CategoryPagerAdapter(getChildFragmentManager());
+                        binding.vpCategories.setAdapter(adapter);
 
-                            mainActivity.hideLoader();
-                            if (listResource.data != null && listResource.data.size() > 0) {
-                                adapter.setCategories(listResource.data);
-                            }
-                        }
-
-                        break;
-                    case LOADING:
-                        mainActivity.displayLoader();
-                        break;
-                    case ERROR:
                         mainActivity.hideLoader();
-                        break;
-                }
+                        if (listResource.data != null && listResource.data.size() > 0) {
+                            adapter.setCategories(listResource.data);
+                        }
+                    }
+                    break;
+                case LOADING:
+                    mainActivity.displayLoader();
+                    break;
+                case ERROR:
+                    mainActivity.hideLoader();
+                    break;
             }
         });
     }

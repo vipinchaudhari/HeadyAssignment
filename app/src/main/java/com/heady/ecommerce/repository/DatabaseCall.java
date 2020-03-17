@@ -13,6 +13,10 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 
+/**
+ * Wrapper to fire database query
+ * @param <T>
+ */
 public class DatabaseCall<T> implements Constants {
     private static final String TAG = DatabaseCall.class.getSimpleName();
     @Inject

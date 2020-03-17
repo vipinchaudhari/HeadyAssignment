@@ -10,6 +10,11 @@ import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * RX java helper to dispose or execute action on threads
+ *
+ * @param <T>
+ */
 public class RXJavaHelper<T> {
 
     private static RXJavaHelper instance;

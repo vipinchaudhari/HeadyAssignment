@@ -2,7 +2,6 @@ package com.heady.ecommerce.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.heady.ecommerce.R;
-import com.heady.ecommerce.application.ECommerceApp;
 import com.heady.ecommerce.databinding.FragmentProductBinding;
 import com.heady.ecommerce.model.ProductVariants;
 import com.heady.ecommerce.repository.Resource;
-import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.viewmodel.ProductViewModel;
 
 
@@ -58,36 +55,36 @@ public class ProductFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //set the adapters to dropdowns
         binding.ddColor.setAdapter(productViewModel.getColorsAdapter());
         binding.ddSize.setAdapter(productViewModel.getSizesAdapter());
+
         final int productId = getArguments().getInt(PRODUCT_ID);
-        productViewModel.getProductDetails(productId).observe(this, new Observer<Resource<ProductVariants>>() {
-            @Override
-            public void onChanged(Resource<ProductVariants> productVariantsResource) {
-                switch (productVariantsResource.status) {
-                    case SUCCESS:
-                        if (productVariantsResource.data != null) {
-                            updateView(productVariantsResource.data);
-                        }
-                        break;
-                    case LOADING:
-                        break;
-                    case ERROR:
-                        break;
-                }
+
+        productViewModel.getProductDetails(productId).observe(this, productVariantsResource -> {
+            switch (productVariantsResource.status) {
+                case SUCCESS:
+                    if (productVariantsResource.data != null) {
+                        updateView(productVariantsResource.data);
+                    }
+                    break;
+                case LOADING:
+                    break;
+                case ERROR:
+                    break;
             }
         });
     }
 
     private void updateView(ProductVariants productVariants) {
         productViewModel.setProductVariants(productVariants);
-        if (productVariants.variants != null && productVariants.variants.size() > 0) {
-            productViewModel.setPrice(productVariants.variants.get(0).getPrice().doubleValue());
-        }
 
-        binding.ddSize.setAdapter(productViewModel.setSizes(productVariants.variants));
-        binding.ddColor.setAdapter((productViewModel.setColors(productVariants.variants)));
+        productViewModel.setSizes(productVariants.variants);
+        productViewModel.setColors(productVariants.variants);
 
+        binding.ddSize.setOnItemClickListener((parent, view, position, id) -> productViewModel.onSizeChanged(position));
+        binding.ddColor.setOnItemClickListener((parent, view, position, id) -> productViewModel.onColorChanged(position));
         binding.setViewModel(productViewModel);
     }
 }

@@ -42,8 +42,6 @@ public class HomeViewModel extends BaseViewModel implements DataSourceCallback {
     @Inject
     DatabaseCall<List<Category>> databaseCall;
 
-
-
     {
         ECommerceApp.getHeadyComponent().inject(this);
 
@@ -55,10 +53,6 @@ public class HomeViewModel extends BaseViewModel implements DataSourceCallback {
 
     public void loadProductsData() {
         networkCall.makeCall(headyService.getProductsData(), this);
-    }
-
-    public void onCategorySelected(Category category, Integer position) {
-        eventLiveData.sendAction(new Event<>(CATEGORY_SELECTED, category, position));
     }
 
     @Override

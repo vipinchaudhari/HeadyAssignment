@@ -1,6 +1,7 @@
 package com.heady.ecommerce.viewmodel;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 
 import androidx.databinding.ObservableField;
@@ -14,7 +15,7 @@ import com.heady.ecommerce.repository.DatabaseCall;
 import com.heady.ecommerce.repository.Resource;
 import com.heady.ecommerce.repository.database.AppDatabase;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,6 +34,9 @@ public class ProductViewModel extends BaseViewModel {
 
     ObservableField<String> price = new ObservableField<>();
     ObservableField<String> total = new ObservableField<>();
+
+    String size = "";
+    String color = "";
 
     {
         ECommerceApp.getHeadyComponent().inject(this);
@@ -60,16 +64,29 @@ public class ProductViewModel extends BaseViewModel {
                 android.R.layout.simple_dropdown_item_1line, android.R.id.text1);
     }
 
-    public ArrayAdapter setColors(List<Variant> variants) {
-        ArrayList<String> arrayStrings = new ArrayList<String>();
+    public void setSizes(List<Variant> variants) {
+        HashSet<String> arrayStrings = new HashSet<String>();
+        if (sizesArrayAdapter != null && variants != null && variants.size() > 0) {
+            for (int i = 0; i < variants.size(); i++) {
+                arrayStrings.add(String.valueOf(variants.get(i).getSize()));
+            }
+            sizesArrayAdapter.notifyDataSetChanged();
+        }
+        sizesArrayAdapter.clear();
+        sizesArrayAdapter.addAll(arrayStrings);
+        sizesArrayAdapter.notifyDataSetChanged();
+    }
+
+    public void setColors(List<Variant> variants) {
+        HashSet<String> arrayStrings = new HashSet<>();
         if (colorsArrayAdapter != null && variants != null && variants.size() > 0) {
             for (int i = 0; i < variants.size(); i++) {
                 arrayStrings.add(variants.get(i).getColor());
             }
         }
-        return colorsArrayAdapter = new ArrayAdapter(
-                context,
-                android.R.layout.simple_dropdown_item_1line, android.R.id.text1, arrayStrings);
+        colorsArrayAdapter.clear();
+        colorsArrayAdapter.addAll(arrayStrings);
+        colorsArrayAdapter.notifyDataSetChanged();
     }
 
     public ObservableField<String> getPrice() {
@@ -94,17 +111,33 @@ public class ProductViewModel extends BaseViewModel {
         this.productVariants = productVariants;
     }
 
-    public ArrayAdapter setSizes(List<Variant> variants) {
-        ArrayList<String> arrayStrings = new ArrayList<String>();
-        if (sizesArrayAdapter != null && variants != null && variants.size() > 0) {
-            for (int i = 0; i < variants.size(); i++) {
-                arrayStrings.add(String.valueOf(variants.get(i).getSize()));
-            }
-            sizesArrayAdapter.notifyDataSetChanged();
+
+    //calculate the price on variant change
+    public void onColorChanged(int i) {
+        Variant variant;
+        variant = productVariants.variants.get(i);
+        color = variant.getColor();
+        if (TextUtils.equals(String.valueOf(variant.getSize()), size)) {
+            setPrice(Double.valueOf(variant.getPrice()));
+        } else {
+            price.set("0.00");
+            total.set("0.00");
         }
-        return sizesArrayAdapter = new ArrayAdapter<String>(
-                context,
-                android.R.layout.simple_dropdown_item_1line, android.R.id.text1, arrayStrings);
+    }
+
+    //calculate the price on variant change
+    public void onSizeChanged(int i) {
+        Variant variant;
+
+        variant = productVariants.variants.get(i);
+        size = String.valueOf(variant.getSize());
+        if (TextUtils.equals(String.valueOf(variant.getColor()), color)) {
+            setPrice(Double.valueOf(variant.getPrice()));
+        } else {
+            price.set("0.00");
+            total.set("0.00");
+        }
+
     }
 
     @Override
@@ -112,4 +145,5 @@ public class ProductViewModel extends BaseViewModel {
         super.onCleared();
         context = null;
     }
+
 }

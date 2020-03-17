@@ -14,6 +14,10 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 
+/**
+ * Wrapper to fetch APIs
+ * @param <T>
+ */
 public class NetworkCall<T> implements Constants {
     private static final String TAG = NetworkCall.class.getSimpleName();
     Single<T> single;

@@ -1,12 +1,10 @@
 package com.heady.ecommerce.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +18,6 @@ import com.heady.ecommerce.databinding.FragmentCategoriesBinding;
 import com.heady.ecommerce.model.Category;
 import com.heady.ecommerce.model.Event;
 import com.heady.ecommerce.repository.Resource;
-import com.heady.ecommerce.utils.Constants;
 import com.heady.ecommerce.view.activity.MainActivity;
 import com.heady.ecommerce.viewmodel.CategoriesViewModel;
 
@@ -37,11 +34,6 @@ public class CategoriesFragment extends BaseFragment {
         CategoriesFragment categoriesFragment = new CategoriesFragment();
         categoriesFragment.setArguments(bundle);
         return categoriesFragment;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
     }
 
     @Override
@@ -62,25 +54,25 @@ public class CategoriesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, CATEGORY_ID + getArguments().getInt(CATEGORY_ID));
+        //register live data to get the categories
         categoriesViewModel.getCategories(getArguments().getInt(CATEGORY_ID))
-                .observe(this, new Observer<Resource<List<Category>>>() {
-                    @Override
-                    public void onChanged(Resource<List<Category>> listResource) {
-                        Log.d(TAG, "onChange() " + listResource.data);
-                        switch (listResource.status) {
-                            case SUCCESS:
-                                if (listResource.data != null && listResource.data.size() > 0) {
-                                    categoriesViewModel.setCategoryList(listResource.data);
-                                }
-                                break;
-                            case LOADING:
-                                break;
-                            case ERROR:
-                                break;
-                        }
+                .observe(this, listResource -> {
+                    Log.d(TAG, "onChange() " + listResource.data);
+                    switch (listResource.status) {
+                        case SUCCESS:
+                            //set category list to viewmodel so that the recycler view will get refreshed
+                            if (listResource.data != null && listResource.data.size() > 0) {
+                                categoriesViewModel.setCategoryList(listResource.data);
+                            }
+                            break;
+                        case LOADING:
+                            break;
+                        case ERROR:
+                            break;
                     }
                 });
 
+        //get the UI clicks
         categoriesViewModel.registerToActions().observe(this, new Observer<Event>() {
             @Override
             public void onChanged(Event event) {

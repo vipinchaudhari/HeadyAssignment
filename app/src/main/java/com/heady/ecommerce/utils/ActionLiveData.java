@@ -5,6 +5,10 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+/**
+ * Moded livedata class to be used as one time events
+ * @param <T>
+ */
 public class ActionLiveData<T> extends MutableLiveData<T> {
 
     @MainThread

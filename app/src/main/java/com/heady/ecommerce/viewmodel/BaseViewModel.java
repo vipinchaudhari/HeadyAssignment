@@ -9,6 +9,7 @@ import com.heady.ecommerce.utils.ActionLiveData;
 import com.heady.ecommerce.utils.Constants;
 
 public class BaseViewModel<T> extends ViewModel implements Constants {
+    //mutable live data to get UI click events
     protected ActionLiveData<Event<T>> eventLiveData = new ActionLiveData<Event<T>>();
     public MutableLiveData<Event<T>> registerToActions() {
         eventLiveData.postValue(new Event<T>(NONE, null, 0));

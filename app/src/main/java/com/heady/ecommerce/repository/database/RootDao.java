@@ -20,6 +20,9 @@ import java.util.List;
 
 import io.reactivex.Single;
 
+/**
+ * this Dao insert the data from api to database
+ */
 @Dao
 public abstract class RootDao {
     private static final String TAG = RootDao.class.getSimpleName();
@@ -88,6 +91,7 @@ public abstract class RootDao {
     void insertAllProductRanks(List<Ranking> rankings) {
         if (rankings != null) {
             List<ProductRank> productRanks = new ArrayList<>();
+            List<ProductRank> allProductRanks = new ArrayList<>();
             int rankingId;
             for (int i = 0; i < rankings.size(); i++) {
                 productRanks = rankings.get(i).getProducts();
@@ -97,10 +101,10 @@ public abstract class RootDao {
                         productRanks.get(j).setRankingId(rankingId);
                     }
                 }
-
+                allProductRanks.addAll(productRanks);
             }
             if (productRanks.size() > 0) {
-                _insertAllProductRanks(productRanks);
+                upsertProductRanks(allProductRanks);
             }
         }
     }
@@ -118,8 +122,11 @@ public abstract class RootDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void _insertAllRankings(List<Ranking> rankings);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void _insertAllProductRanks(List<ProductRank> productRanks);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    public abstract List<Long> _insertAllProductRanks(List<ProductRank> productRanks);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    public abstract void _updateAllProductRanks(List<ProductRank> productRanks);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void _insertAllVariants(List<Variant> variants);
@@ -127,5 +134,18 @@ public abstract class RootDao {
     @Query("Select * from category")
     public abstract Single<List<Category>> getAllCategories();
 
+    private void upsertProductRanks(List<ProductRank> productRanks) {
+        List<Long> insertResult = _insertAllProductRanks(productRanks);
+        List<ProductRank> updateList = new ArrayList<>();
 
+        for (int i = 0; i < insertResult.size(); i++) {
+            if (insertResult.get(i) == -1) {
+                updateList.add(productRanks.get(i));
+            }
+        }
+
+        if (!updateList.isEmpty()) {
+            _updateAllProductRanks(updateList);
+        }
+    }
 }

@@ -21,4 +21,9 @@ public interface Constants {
     String CATEGORY_ID = "CATEGORY_ID";
     String CATEGORY_NAME = "CATEGORY_NAME";
     String PRODUCT_ID = "PRODUCT_ID";
+
+    //Filers key
+    String MOST_VIEW_FILTER = "view_count";
+    String MOST_PURCHARED_FILTER = "order_count";
+    String MOST_SHARED_FILTER = "shares";
 }

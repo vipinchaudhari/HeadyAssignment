@@ -32,4 +32,13 @@ public interface ProductDao {
     @Transaction
     @Query("Select * from Product where id=:productId")
     List<ProductVariants> getProductWithVariant1(int productId);
+
+    @Query("Select * from Product LEFT JOIN ProductRank ON product.id = productrank.id where product.category_id=:categoryId order by productrank.shares DESC")
+    Single<List<Product>> getProductsWithSharedFilter(int categoryId);
+
+    @Query("Select * from Product LEFT JOIN ProductRank ON product.id = productrank.id where product.category_id=:categoryId order by productrank.view_count DESC")
+    Single<List<Product>> getProductsWithViewedFilter(int categoryId);
+
+    @Query("Select * from Product LEFT JOIN ProductRank ON product.id = productrank.id where product.category_id=:categoryId order by productrank.order_count DESC")
+    Single<List<Product>> getProductsWithPurchasedFilter(int categoryId);
 }

@@ -32,11 +32,6 @@ public class ChildCategoriesFragment extends BaseFragment {
     private ChildCategoriesViewModel childCategoriesViewModel;
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         childCategoriesViewModel = ViewModelProviders.of(getActivity()).get(ChildCategoriesViewModel.class);
@@ -53,31 +48,29 @@ public class ChildCategoriesFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, CATEGORY_ID + getArguments().getInt(CATEGORY_ID));
+        //get the child categories
         childCategoriesViewModel.getChildCategories(getArguments().getInt(CATEGORY_ID))
-                .observe(this, new Observer<Resource<List<Category>>>() {
-                    @Override
-                    public void onChanged(Resource<List<Category>> listResource) {
-                        Log.d(TAG, "onChanged() " + listResource.data);
-                        PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
-                        binding.vpProducts.setAdapter(adapter);
-                        switch (listResource.status) {
-                            case SUCCESS:
-                                if (listResource.data != null && listResource.data.size() > 0) {
-                                    adapter.setCategories(listResource.data);
-                                } else {
-                                    listResource.data = new ArrayList<>();
-                                    listResource.data.add(new Category(getArguments().getInt(CATEGORY_ID), getArguments().getString(CATEGORY_NAME)));
-                                    adapter.setCategories(listResource.data);
-                                }
-                                break;
-                            case ERROR:
+                .observe(this, listResource -> {
+                    Log.d(TAG, "onChanged() " + listResource.data);
+                    PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
+                    binding.vpProducts.setAdapter(adapter);
+                    switch (listResource.status) {
+                        case SUCCESS:
+                            if (listResource.data != null && listResource.data.size() > 0) {
+                                adapter.setCategories(listResource.data);
+                            } else {
+                                listResource.data = new ArrayList<>();
+                                listResource.data.add(new Category(getArguments().getInt(CATEGORY_ID), getArguments().getString(CATEGORY_NAME)));
+                                adapter.setCategories(listResource.data);
+                            }
+                            break;
+                        case ERROR:
 
-                                break;
-                            case LOADING:
+                            break;
+                        case LOADING:
 
-                                break;
+                            break;
 
-                        }
                     }
                 });
 
